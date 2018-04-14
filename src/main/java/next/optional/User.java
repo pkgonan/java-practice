@@ -1,5 +1,7 @@
 package next.optional;
 
+import java.util.Optional;
+
 public class User {
     private String name;
     private Integer age;
@@ -9,12 +11,12 @@ public class User {
         this.age = age;
     }
     
-    public String getName() {
-        return name;
+    public Optional<String> getName() {
+        return Optional.ofNullable(name);
     }
     
-    public Integer getAge() {
-        return age;
+    public Optional<Integer> getAge() {
+        return Optional.ofNullable(age);
     }
     
     public boolean matchName(String name) {
@@ -22,18 +24,14 @@ public class User {
     }
 
     public static boolean ageIsInRange1(User user) {
-        boolean isInRange = false;
-     
-        if (user != null && user.getAge() != null
-          && (user.getAge() >= 30
-            && user.getAge() <= 45)) {
-            isInRange = true;
-        }
-        return isInRange;
+        return ageIsInRange2(user);
     }
     
     public static boolean ageIsInRange2(User user) {
-        return false;
+        return Optional.ofNullable(user)
+                .flatMap(User::getAge)
+                .filter(a-> a >= 30 && a <= 45)
+                .isPresent();
     }
 
     @Override
